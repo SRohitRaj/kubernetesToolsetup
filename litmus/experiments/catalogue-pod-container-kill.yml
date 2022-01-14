@@ -1,0 +1,43 @@
+# container-kill : (Failed)
+apiVersion: litmuschaos.io/v1alpha1
+kind: ChaosEngine
+metadata:
+  name: catalogue-pod-container-kill
+  namespace: litmus
+spec:
+  # It can be true/false
+  annotationCheck: 'false'
+  # It can be active/stop
+  engineState: 'active'
+  appinfo:
+    appns: 'sock-shop'
+    applabel: 'name=catalogue'
+    appkind: 'deployment'
+  chaosServiceAccount: litmus-admin
+  # It can be delete/retain
+  jobCleanUpPolicy: 'delete' 
+  experiments:
+    - name: container-kill
+      spec:
+        components:
+          env:
+            # provide the chaos interval
+            - name: CHAOS_INTERVAL
+              value: '10'
+
+            # provide the total chaos duration
+            - name: TOTAL_CHAOS_DURATION
+              value: '20'
+
+            # provide the name of container runtime
+            # for litmus LIB, it supports docker, containerd, crio
+            # for pumba LIB, it supports docker only
+            - name: CONTAINER_RUNTIME
+              value: 'docker'
+
+            # provide the socket file path
+            - name: SOCKET_PATH
+              value: '/var/run/docker.sock'
+
+
+# kubectl describe chaosengine.litmuschaos.io/pod-container-kill -n litmus              

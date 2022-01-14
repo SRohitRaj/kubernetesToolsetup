@@ -1,0 +1,237 @@
+pipeline {
+    agent any
+    stages {
+           stage ('Pre-requisites') {
+               steps {
+                  sshagent(credentials : ['ubuntu']) {
+                  sh "ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST mkdir -p /home/ubuntu/tools/"
+                     
+                  }
+               }
+           } 
+           stage('Environment Setup') {
+             steps {
+                 script { 
+                     sh  'echo $BOTTOKEN'
+                     sh  'echo "#!/bin/bash" > ENV.sh'
+                     sh  'echo export BOTTOKEN=$BOTTOKEN >> ENV.sh'
+                     sh  'echo export KUBECOST=$KUBECOST >> ENV.sh'
+                   sshagent(credentials : ['ubuntu']) {
+                    sh "scp -r -o StrictHostKeyChecking=no * $ssh_user@$HOST:/home/ubuntu/tools"                
+                    }
+                }
+             }
+         }
+         stage('Dashboard') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    bash /home/ubuntu/tools/dashboard/dashboard.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         }
+          stage('HPA') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    bash ./tools/hpa/hpa.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         }
+         stage('Ingress Controller') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    bash tools/ingress-controller/ingress-controller.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         }
+          stage('Metrics Server') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    bash tools/metrics-server/metrics_server.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         }
+
+          stage('Helm Installation') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    bash tools/helm-installation/helm_installation.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         }
+
+
+        stage('Prometheus') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    bash tools/prometheus/prometheus.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         }
+         stage('Grafana') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    bash tools/grafana/grafana.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         }
+
+          stage('Chaos Mesh') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    bash tools/chaos-mesh/chaos.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         }
+
+
+             stage('Litmus Chaos') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    bash tools/litmus/litmus.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         }
+   /*         stage('ELK Stack') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    bash tools/elk/elk.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         } */   
+        stage('Slack Notifications') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    . ENV.sh
+                    bash tools/slack/botkube.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         }
+
+
+
+            stage('GitOps') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    . ENV.sh
+                    bash tools/gitops/argocd.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         }
+
+            stage('Argo Rollouts') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    . ENV.sh
+                    bash tools/argro-rollouts/argocd-rollout.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         }
+
+          stage('Workflows') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    . ENV.sh
+                    bash tools/argo-workflow/argocd-workflow.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         }
+
+             stage('KubeCost') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    . ENV.sh
+                    bash tools/kubecost/kubecost.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         }
+          stage('Istio') {
+             steps {
+                 script {
+                    sshagent(credentials : ['ubuntu']) {
+                    sh """ssh  -o StrictHostKeyChecking=no -tt $ssh_user@$HOST << EOF
+                    . ENV.sh
+                    bash tools/istio/istio-setup.sh
+                    exit
+                    EOF"""
+                    }
+                }
+             }
+         }
+
+        }
+    }

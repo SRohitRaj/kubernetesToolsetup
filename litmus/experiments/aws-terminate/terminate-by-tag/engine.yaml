@@ -1,0 +1,37 @@
+apiVersion: litmuschaos.io/v1alpha1
+kind: ChaosEngine
+metadata:
+  name: ec2-terminate-by-tag
+  namespace: litmus
+spec:
+  annotationCheck: 'false'
+  engineState: 'active'
+  chaosServiceAccount: litmus-admin
+  # It can be retain/delete
+  jobCleanUpPolicy: 'delete'
+  experiments:
+    - name: ec2-terminate-by-tag
+      spec:
+        components:
+          env: 
+            # set chaos duration (in sec) as desired
+            - name: TOTAL_CHAOS_DURATION
+              value: '30'
+
+            # set interval duration (in sec) as desired
+            - name: CHAOS_INTERVAL
+              value: '30'              
+
+             # Instance Tag of the target ec2 instances
+             # ex: team:devops (key:value)
+            - name: INSTANCE_TAG
+              # value: 'aws\:autoscaling\:groupName:eks-d0bc8631-b8eb-b990-871d-4acd3ee558ec'
+              value: 'key:val'
+              
+            # provide the region name of the instace
+            - name: REGION
+              value: 'us-east-1'
+
+            # enable it if the target instance is a part of self-managed nodegroup.
+            - name: MANAGED_NODEGROUP
+              value: 'enable'

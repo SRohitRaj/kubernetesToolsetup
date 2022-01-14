@@ -1,0 +1,8 @@
+elasticsearchHosts: "http://elasticsearch-master.db:9200"
+
+replicas: 1
+
+service:
+  type: NodePort
+  port: 5601
+  nodePort: "32236"

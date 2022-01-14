@@ -1,0 +1,94 @@
+---
+#################################################
+# ConfigMap for index.html for mydata v1
+#################################################
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mydata-cm-v1
+data:
+  index.html: |
+      <!DOCTYPE html>
+      <html>
+      <head>
+      <title>Page Title</title>
+      <style>
+         body {
+          background-color: black;
+            text-align: center;
+              color: white;
+            }
+            </style>
+            </head>
+            <body>
+
+            <h1>Sample Application !!</h1>
+            <h3>This is our Demo  Application </h3>
+      <img src="http://45.media.tumblr.com/30a0796a89045b4880dfee2387ad6aa3/tumblr_o2zbvuvChc1s4fz4bo1_r1_500.gif" alt="Version1" style="width:700px;height:300px;">
+
+      </body>
+      </html>
+---
+#################################################
+# Service: mydata
+#################################################
+apiVersion: v1
+kind: Service
+metadata:
+ name: mydata
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: mydata
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mydata
+  labels:
+    account: mydata
+
+#################################################
+# Deployment: mydata v1
+#################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydata
+  labels:
+    app: mydata
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mydata
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: mydata
+        version: v1
+    spec:
+      containers:
+      - image: nginx
+        name: mydata
+        volumeMounts:
+        - name: index-html
+          mountPath: /usr/share/nginx/html
+        ports:
+        - containerPort: 80
+        resources:
+           limits:
+              cpu: "100m"
+              ephemeral-storage: "2Gi"
+           requests:
+             cpu: "100m"
+             ephemeral-storage: "1Gi"
+      volumes:
+      - name: index-html
+        configMap:
+          name: mydata-cm-v1
+          #serviceAccountName: mydata

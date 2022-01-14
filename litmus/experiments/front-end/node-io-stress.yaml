@@ -1,0 +1,42 @@
+# node-io-stress
+apiVersion: litmuschaos.io/v1alpha1
+kind: ChaosEngine
+metadata:
+  name: node-io-stress
+  namespace: litmus
+spec:
+  # It can be true/false
+  annotationCheck: 'false'
+  # It can be active/stop
+  engineState: 'active'
+  #ex. values: ns1:name=percona,ns2:run=nginx 
+  auxiliaryAppInfo: ''
+  chaosServiceAccount: litmus-admin
+  # It can be delete/retain
+  jobCleanUpPolicy: 'delete'
+  experiments:
+    - name: node-io-stress
+      spec:
+        components:
+          env:
+            # set chaos duration (in sec) as desired
+            - name: TOTAL_CHAOS_DURATION
+              value: '120'
+
+            ## specify the size as percentage of free space on the file system
+            - name: FILESYSTEM_UTILIZATION_PERCENTAGE
+              value: '10'
+
+            ## Number of core of CPU
+            - name: CPU
+              value: '1'
+
+            ## Total number of workers default value is 4
+            - name: NUMBER_OF_WORKERS
+              value: '4'                               
+            
+             ## enter the comma separated target nodes name
+            - name: TARGET_NODES
+              value: 'ip-192-168-10-220.ec2.internal'
+
+# kubectl describe chaosengine.litmuschaos.io/node-io-stress -n litmus              

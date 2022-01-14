@@ -1,0 +1,42 @@
+replicas: 1
+
+logstashConfig:
+  logstash.yml: |
+    http.host: "0.0.0.0"
+    path.config: /usr/share/logstash/pipeline
+
+logstashPipeline:
+  logstash.conf: |
+    # all input will come from filebeat, no local logs
+    input {
+      beats {
+        port => 5044
+      }
+    }
+    filter {
+      if [message] =~ /^\{.*\}$/ {
+        json {
+          source => "message"
+        }
+      }
+      if [ClientHost] {
+        geoip {
+          source => "ClientHost"
+        }
+      }
+    }
+    output {
+        elasticsearch {
+            hosts => [ "elasticsearch-master.db:9200" ]
+        }
+    }
+
+antiAffinity: "soft"
+
+service:
+ type: ClusterIP
+ ports:
+   - name: beats
+     port: 5044
+     protocol: TCP
+     targetPort: 5044
