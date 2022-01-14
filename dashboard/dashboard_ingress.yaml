@@ -16,5 +16,5 @@ spec:
         backend:
           service:
             name: kubernetes-dashboard
-            service:
-              port: 443
+            port:
+              number: 443
