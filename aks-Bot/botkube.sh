@@ -18,7 +18,7 @@ EOF
 
 helm upgrade --version v0.12.2  botkube --namespace botkube \
 --install \
---values values.yaml -f config.yaml \
+--values values.yaml --validate=false -f config.yaml --validate=false\
 --set communications.slack.token=$BOTTOKEN \
 --set communications.teams.appID=$BOT_APP_ID \
 --set communications.teams.appPassword=$BOT_APP_PWD \
