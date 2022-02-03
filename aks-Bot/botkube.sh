@@ -16,9 +16,9 @@ EOF
 # export BOT_APP_PWD=6.********~O~-H7KS5sCfHJRe02~AYnA7
 # export BOT_HOST_PATH=msteams.letsdevops.tk
 
-helm upgrade --version v0.12.2  botkube --namespace botkube \
+helm upgrade  botkube --namespace botkube \
 --install \
---values values.yaml --validate=false -f config.yaml --validate=false\
+--values values.yaml -f config.yaml \
 --set communications.slack.token=$BOTTOKEN \
 --set communications.teams.appID=$BOT_APP_ID \
 --set communications.teams.appPassword=$BOT_APP_PWD \
