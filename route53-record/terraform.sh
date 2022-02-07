@@ -1,7 +1,8 @@
 #!/bin/bash
 set -x
 export KUBECONFIG="$(pwd)/gateway-kubeconfig" 
-gcloud container clusters get-credentials autopilot-cluster-1 --region us-central1 --project yash-innovation 
+#gcloud container clusters get-credentials autopilot-cluster-1 --region us-central1 --project yash-innovation
+az aks get-credentials --resource-group RG-Container --name RG-Container-cluster  --overwrite-existing
 export INGRESS_EXT_IP=$(kubectl -n default get svc kibana -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
 terraform init 
 echo "Ingress IP : "$INGRESS_EXT_IP
