@@ -1,7 +1,7 @@
 #!/bin/sh
 cd aks-Bot
 set -x
- az aks get-credentials --resource-group $RG-Container --name $RG-Container-cluster  --overwrite-existing
+ az aks get-credentials --resource-group RG-Container --name RG-Container-cluster  --overwrite-existing
 helm repo add infracloudio https://infracloudio.github.io/charts
 helm repo update
 cat <<EOF | kubectl apply -f - 
