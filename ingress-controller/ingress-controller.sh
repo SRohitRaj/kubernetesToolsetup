@@ -1,3 +1,3 @@
 #!/bin/bash
 ls
-   kubectl apply -f nginx-ingress-controller.yaml
+   kubectl apply -f ingress-controller/nginx-ingress-controller.yaml
