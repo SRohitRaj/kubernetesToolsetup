@@ -1,5 +1,5 @@
 #!/bin/sh
-
+cd aks-Bot
 helm repo add infracloudio https://infracloudio.github.io/charts
 helm repo update
 cat <<EOF | kubectl apply -f - 
