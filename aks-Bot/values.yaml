@@ -1,0 +1,41 @@
+#values.yaml
+image:
+  repository: infracloudio/botkube
+  tag: v0.12.0
+communications:
+  # Settings for MS Teams
+  teams:
+    enabled: true
+    #appID: 016d2e9c-2ebb-4b0e-8f76-200d2e295c6c
+    #appPassword: 6.tVzLsnGC~O~-H7KS5sCfHJRe02~AYnA7
+  slack:
+    enabled: true
+    channel: kubernetes-demo
+    #token: xoxb-1605992000518-1610725878007-6kjucyGbsOlE0hltDA9ccZC3
+    
+config:
+  # Setting to support multiple clusters
+  settings:
+    # Cluster name to differentiate incoming messages
+    clustername: prod
+    # Kubectl executor configs
+    kubectl:
+      # Set true to enable kubectl commands execution
+      enabled: true  
+      restrictAccess: true      
+      
+# Ingress settings to expose teams endpoint
+ingress:
+  create: true
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    # reference production issuer
+    cert-manager.io/issuer: "letsencrypt-prod"
+  # host: 'devopslab-result.tk'
+  urlPath: "/"
+  tls:
+    enabled: true
+    secretName: 'botkube-production-certificate'
+    
