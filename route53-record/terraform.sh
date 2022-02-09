@@ -1,5 +1,7 @@
 #!/bin/bash
 set -x
+ls
+cd route53-record
 export KUBECONFIG="$(pwd)/gateway-kubeconfig" 
 #gcloud container clusters get-credentials autopilot-cluster-1 --region us-central1 --project yash-innovation
 az aks get-credentials --resource-group RG-Container --name RG-Container-cluster  --overwrite-existing
