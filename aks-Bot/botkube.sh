@@ -24,12 +24,7 @@ helm upgrade --install --version v0.12.4 botkube --namespace botkube \
 --set communications.slack.token=$BOTTOKEN \
 --set communications.teams.appID=$BOT_APP_ID \
 --set communications.teams.appPassword=$BOT_APP_PWD \
---set config.settings.clustername="RG-Container-cluster" \
---set config.settings.kubectl.enabled=true \
---set ingress.create=true \
 --set ingress.host=$BOT_HOST_PATH \
---set ingress.tls.enabled=true \
---set ingress.tls.secretName=botkube-production-certificate \
 --set image.repository=infracloudio/botkube \
 --set image.tag=v0.12.2 \
 infracloudio/botkube
