@@ -96,16 +96,16 @@ spec:
     # reference secret for production TLS certificate
     secretName: k8dash-production-certificate
   rules:
-    - host: $BOT_HOST_PATH
-      http:
-        paths:
-          # - path: /k8dash(/|$)(.*)
-          - path: /
-            backend:
-	      service:
-                name: botkube
-                port:
-                  number: 3978
+  - host: $BOT_HOST_PATH
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: botkube
+            port:
+              number: 3978
 EOF
 }
 a=0
