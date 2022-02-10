@@ -36,7 +36,7 @@ helm install --version v0.12.4 botkube --namespace botkube \
   --set communications.teams.appPassword=$BOT_APP_PWD \
   --set config.settings.clustername='RG-Container-cluster' \
   --set config.settings.kubectl.enabled=true \
-  --set ingress.create=true \
+  --set ingress.create=false \
   --set ingress.host=$BOT_HOST_PATH \
   --set ingress.tls.enabled=true \
   --set ingress.tls.secretName='botkube-production-certificate' \
