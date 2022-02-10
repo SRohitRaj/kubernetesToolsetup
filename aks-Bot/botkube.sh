@@ -97,7 +97,7 @@ spec:
     secretName: botkube-production-certificate
   rules:
   - host: $BOT_HOST_PATH
-  - http:
+    http:
       paths:
       - path: /
         pathType: Prefix
