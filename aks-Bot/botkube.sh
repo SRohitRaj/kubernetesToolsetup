@@ -94,7 +94,7 @@ spec:
   - hosts:
     - $BOT_HOST_PATH
     # reference secret for production TLS certificate
-    secretName: k8dash-production-certificate
+    secretName: botkube-production-certificate
   rules:
   - host: $BOT_HOST_PATH
   - http:
