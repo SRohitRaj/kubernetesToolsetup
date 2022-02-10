@@ -80,6 +80,33 @@ spec:
   dnsNames:
   - $BOT_HOST_PATH
 ---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-botkube
+  namespace: botkube
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    # reference production issuer
+    cert-manager.io/issuer: "letsencrypt-prod"
+    # nginx.ingress.kubernetes.io/rewrite-target: /\$2
+spec:
+  tls:
+  - hosts:
+    - $BOT_HOST_PATH
+    # reference secret for production TLS certificate
+    secretName: k8dash-production-certificate
+  rules:
+    - host: $BOT_HOST_PATH
+      http:
+        paths:
+          # - path: /k8dash(/|$)(.*)
+          - path: /
+            backend:
+              serviceName: botkube
+              servicePort: 3978
 EOF
 }
 a=0
