@@ -77,7 +77,7 @@ spec:
   dnsNames:
   - $BOT_HOST_PATH
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-botkube
@@ -102,8 +102,10 @@ spec:
           # - path: /k8dash(/|$)(.*)
           - path: /
             backend:
-              serviceName: botkube
-              servicePort: 3978
+	      service:
+                name: botkube
+                port:
+                  number: 3978
 EOF
 }
 a=0
