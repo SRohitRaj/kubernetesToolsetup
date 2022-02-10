@@ -18,16 +18,29 @@ EOF
 # export BOT_APP_PWD=6.********~O~-H7KS5sCfHJRe02~AYnA7
 # export BOT_HOST_PATH=msteams.letsdevops.tk
 
-helm upgrade --install --version v0.12.4 botkube --namespace botkube \
---values values.yaml -f config.yaml \
---set communications.teams.enabled=true \
---set communications.slack.token=$BOTTOKEN \
---set communications.teams.appID=$BOT_APP_ID \
---set communications.teams.appPassword=$BOT_APP_PWD \
---set ingress.host=$BOT_HOST_PATH \
---set image.repository=infracloudio/botkube \
---set image.tag=v0.12.2 \
-infracloudio/botkube
+#helm upgrade --install --version v0.12.4 botkube --namespace botkube \
+#--values values.yaml -f config.yaml \
+#--set communications.teams.enabled=true \
+#--set communications.slack.token=$BOTTOKEN \
+#--set communications.teams.appID=$BOT_APP_ID \
+#--set communications.teams.appPassword=$BOT_APP_PWD \
+#--set ingress.host=$BOT_HOST_PATH \
+#--set image.repository=infracloudio/botkube \
+#--set image.tag=v0.12.2 \
+#infracloudio/botkube
+
+helm install --version v0.12.4 botkube --namespace botkube \
+  --values values.yaml -f config.yaml \
+  --set communications.teams.enabled=true \
+  --set communications.teams.appID=$BOT_APP_ID \
+  --set communications.teams.appPassword=$BOT_APP_PWD \
+  --set config.settings.clustername='RG-Container-cluster' \
+  --set config.settings.kubectl.enabled=true \
+  --set ingress.create=true \
+  --set ingress.host=$BOT_HOST_PATH \
+  --set ingress.tls.enabled=true \
+  --set ingress.tls.secretName='botkube-production-certificate' \
+  infracloudio/botkube
 
 create_issuer(){
 	cat <<EOF | kubectl apply -f - 
