@@ -9,7 +9,7 @@ communications:
     #appID: 016d2e9c-2ebb-4b0e-8f76-200d2e295c6c
     #appPassword: 6.tVzLsnGC~O~-H7KS5sCfHJRe02~AYnA7
   slack:
-    enabled: true
+    enabled: false
     channel: kubernetes-demo
     #token: xoxb-1605992000518-1610725878007-6kjucyGbsOlE0hltDA9ccZC3
     
