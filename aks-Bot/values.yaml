@@ -26,7 +26,7 @@ config:
       
 # Ingress settings to expose teams endpoint
 ingress:
-  create: true
+  create: false
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
