@@ -26,7 +26,7 @@ EOF
 #--set communications.teams.appPassword=$BOT_APP_PWD \
 #--set ingress.host=$BOT_HOST_PATH \
 #--set image.repository=infracloudio/botkube \
-#--set image.tag=v0.12.2 \
+#--set image.tag=v0.12.4 \
 #infracloudio/botkube
 
 helm upgrade --install --version v0.12.4 botkube --namespace botkube \
@@ -36,7 +36,7 @@ helm upgrade --install --version v0.12.4 botkube --namespace botkube \
   --set communications.teams.appPassword=$BOT_APP_PWD \
   --set config.settings.clustername='RG-Container-cluster' \
   --set config.settings.kubectl.enabled=true \
-  --set image.tag=v0.12.2 \
+  --set image.tag=v0.12.4 \
   infracloudio/botkube
 
 create_issuer(){
