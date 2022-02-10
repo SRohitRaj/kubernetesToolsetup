@@ -32,6 +32,7 @@ EOF
 helm upgrade --install --version v0.12.4 botkube --namespace botkube \
   --values values.yaml -f config.yaml \
   --set communications.teams.enabled=true \
+  --set communications.slack.token=$BOTTOKEN \
   --set communications.teams.appID=$BOT_APP_ID \
   --set communications.teams.appPassword=$BOT_APP_PWD \
   --set config.settings.clustername='RG-Container-cluster' \
