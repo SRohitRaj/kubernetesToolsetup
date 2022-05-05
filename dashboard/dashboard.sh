@@ -13,7 +13,7 @@ cat <<EOF | kubectl apply -f -
 ---
 # prod-issuer.yml
 apiVersion: cert-manager.io/v1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   # different name
   name: letsencrypt-prod
@@ -32,7 +32,7 @@ spec:
          class: nginx
 ---
 apiVersion: cert-manager.io/v1
-kind: Certificate
+kind: ClusterIssuer
 metadata:
   # different name
   name: dashboard-prod-cert
