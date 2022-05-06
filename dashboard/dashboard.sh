@@ -2,9 +2,9 @@
 set -x
 
 echo "Creating Kubernetes Dashboard"
-kubectl apply -f tools/dashboard/dashboard_recommended.yaml
-kubectl apply -f tools/dashboard/admin_user.yaml
-kubectl apply -f tools/dashboard/sample_user.yaml
+kubectl apply -f kuernetesToolsetup/dashboard/dashboard_recommended.yaml
+kubectl apply -f kuernetesToolsetup/dashboard/admin_user.yaml
+kubectl apply -f kuernetesToolsetup/dashboard/sample_user.yaml
 create_ingress(){
 export DASHBOARD_HOST_PATH=dashboard.letsdevops.tk
 
